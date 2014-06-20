@@ -537,6 +537,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SHAKE_SENSITIVITY), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.VOLUME_KEY_CURSOR_CONTROL), false, this,
+                    UserHandle.USER_ALL);
             update();
         }
 
@@ -616,6 +619,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mNavigationBarView.setNavigationBarCanMove(mNavigationBarCanMove);
                 }
                 prepareNavigationBarView();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.VOLUME_KEY_CURSOR_CONTROL))) {
+                if (mNavigationBarView != null) {
+                    mNavigationBarView.setNavigationBarDisableIMECursor(
+                            Settings.System.getIntForUser(mContext.getContentResolver(),
+                                    Settings.System.VOLUME_KEY_CURSOR_CONTROL, 0,
+                                    UserHandle.USER_CURRENT) > 0);
+                }
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_SHORTCUTS_CONFIG))
                 || uri.equals(Settings.System.getUriFor(
@@ -3228,6 +3239,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         int msg = (mExpandedVisible)
                 ? ((mQSPanelIsOpen) ? MSG_FLIP_TO_NOTIFICATION_PANEL : MSG_CLOSE_PANELS)
                 : MSG_OPEN_NOTIFICATION_PANEL;
+        if (msg == MSG_OPEN_NOTIFICATION_PANEL) {
+            try {
+                mWindowManagerService.toggleStatusBar();
+            } catch (RemoteException ex) {
+            }
+        }
         mHandler.removeMessages(msg);
         mHandler.sendEmptyMessage(msg);
     }
@@ -3242,6 +3259,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         } else {
             msg = (mExpandedVisible)
                 ? MSG_CLOSE_PANELS : MSG_OPEN_QS_PANEL;
+        }
+        if (msg == MSG_OPEN_QS_PANEL) {
+            try {
+                mWindowManagerService.toggleStatusBar();
+            } catch (RemoteException ex) {
+            }
         }
         mHandler.removeMessages(msg);
         mHandler.sendEmptyMessage(msg);
