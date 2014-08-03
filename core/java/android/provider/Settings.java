@@ -2,7 +2,6 @@
  * Copyright (c) 2013 The Linux Foundation. All rights reserved.
  * Not a Contribution.
  * Copyright (C) 2006 The Android Open Source Project
- * This code has been modified. Portions copyright (C) 2014, ParanoidAndroid Project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2694,12 +2693,6 @@ public final class Settings {
         public static final String LOCKSCREEN_MAXIMIZE_WIDGETS = "lockscreen_maximize_widgets";
 
         /**
-         * Whether a custom lockscreen wallpaper is enabled
-         * @hide
-         */
-        public static final String LOCKSCREEN_WALLPAPER = "lockscreen_wallpaper";
-
-        /**
          * Whether to use the carousel as widget container on portrait view
          * @hide
          */
@@ -2792,6 +2785,12 @@ public final class Settings {
          * @hide
          */
         public static final String ACTIVE_DISPLAY_DOUBLE_TAP = "active_display_double_tap";
+
+        /**
+         * Whether to enable the modlock keyguard
+         * @hide
+         */
+        public static final String LOCKSCREEN_MODLOCK_ENABLED = "lockscreen_modlock_enabled";
 
         /**
          * @deprecated Use {@link android.provider.Settings.Global#LOW_BATTERY_SOUND}
@@ -3746,12 +3745,6 @@ public final class Settings {
         public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
 
         /**
-         * Sets the lockscreen background style
-         * @hide
-         */
-        public static final String LOCKSCREEN_BACKGROUND = "lockscreen_background";
-
-         /**
          * Action for long-pressing back button on lock screen
          * @hide
          */
@@ -4384,23 +4377,11 @@ public final class Settings {
         public static final String NOTIFICATION_SHORTCUTS_COLOR_MODE = "notification_shortcuts_color_mode";
 
         /**
-         * Allows to show the background activity back the lockscreen
-         * @hide
-         */
-        public static final String LOCKSCREEN_SEE_THROUGH = "lockscreen_see_through";
-
-        /**
          * Whether lockscreen rotation is enabled
          * 0 = off, 1 = on, 2 = portrait, 3 = landscape
          * @hide
          */
         public static final String LOCKSCREEN_ROTATION_ENABLED = "lockscreen_rotation_enabled";
-
-         /**
-         * Allows blurring the lockscreen background
-         * @hide
-         */
-        public static final String LOCKSCREEN_BLUR_RADIUS = "lockscreen_blur_radius";
 
         /**
          * Whether to show the network status in the status bar
@@ -4808,6 +4789,7 @@ public final class Settings {
             POWER_MENU_SOUND_ENABLED,
             POWER_MENU_USER_ENABLED,
             LOCKSCREEN_BATTERY_VISIBILITY,
+            LOCKSCREEN_MODLOCK_ENABLED,
             PHONE_BLACKLIST_ENABLED,
             PHONE_BLACKLIST_NOTIFY_ENABLED,
             PHONE_BLACKLIST_PRIVATE_NUMBER_MODE,
@@ -6964,12 +6946,6 @@ public final class Settings {
          * @hide
          */
         public static final String PAYMENT_SERVICE_SEARCH_URI = "payment_service_search_uri";
-
-        /**
-         * Whether to allow killing of the foreground app by long-pressing the Back button
-         * @hide
-         */
-        public static final String KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
 
         /**
          * Whether to include options in power menu for rebooting into recovery or bootloader
