@@ -2448,12 +2448,6 @@ public final class Settings {
         public static final String DTMF_TONE_TYPE_WHEN_DIALING = "dtmf_tone_type";
 
         /**
-         * Whether incall glowpad background is transparent or not.  The value is
-         * boolean (1 or 0).
-         */
-        public static final String INCALL_GLOWPAD_TRANSPARENCY = "incall_glowpad_transparency";
-
-        /**
          * Padding above and below dialpad keys in dialer.
          */
         public static final String DIALKEY_PADDING = "dialkey_padding";
@@ -3473,6 +3467,11 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_NOTIFICATIONS_COLOR = "lockscreen_notifications_color";
+
+        /**
+         * @hide
+         */
+        public static final String PROXIMITY_ON_WAKE = "proximity_on_wake";
 
         /**
          * Enable looking up of phone numbers of nearby places
@@ -4577,6 +4576,13 @@ public final class Settings {
         public static final String TOAST_ANIMATION = "toast_animation";
 
         /**
+         * Heads up: Option to exclude from lockscreen, default is 0 (off).
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_EXCLUDE_FROM_LOCK_SCREEN = "heads_up_exclude_from_lock_screen";
+
+        /**
          * ListView Animations
          * 0 == None
          * 1 == Wave (Left)
@@ -4724,6 +4730,24 @@ public final class Settings {
         public static final String NOTIFICATION_HIDE_LABELS = "notification_hide_labels";
 
         /**
+         * Locale for secondary overlay on dialer for t9 search input
+         * @hide
+         */
+        public static final String T9_SEARCH_INPUT_LOCALE = "t9_search_input_locale";
+
+        /**
+         * The style of the incoming call screen.
+         * Default is {@link INCOMING_CALL_STYLE_FULLSCREEN_PHOTO}.
+         * @hide
+         */
+        public static final String INCOMING_CALL_STYLE = "incoming_call_style";
+
+        /** @hide */
+        public static final int INCOMING_CALL_STYLE_CLASSIC = 0;
+        /** @hide */
+        public static final int INCOMING_CALL_STYLE_FULLSCREEN_PHOTO = 1;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4822,6 +4846,7 @@ public final class Settings {
             PHONE_BLACKLIST_PRIVATE_NUMBER_MODE,
             PHONE_BLACKLIST_UNKNOWN_NUMBER_MODE,
             PHONE_BLACKLIST_REGEX_ENABLED,
+            INCOMING_CALL_STYLE,
         };
 
         // Settings moved to Settings.Secure
