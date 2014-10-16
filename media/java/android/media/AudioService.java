@@ -2974,6 +2974,15 @@ public class AudioService extends IAudioService.Stub {
 
     public void setWiredDeviceConnectionState(int device, int state, String name) {
         synchronized (mConnectedDevices) {
+            if ((state == 1) && ((device & mSafeMediaVolumeDevices) != 0)) {
+                boolean restoreSafeVolume = Settings.System.getIntForUser(
+                        mContentResolver,
+                        Settings.System.SAFE_HEADSET_VOLUME_RESTORE,
+                        0, UserHandle.USER_CURRENT) != 0;
+                if (restoreSafeVolume) {
+                    enforceSafeMediaVolume();
+                }
+            }
             int delay = checkSendBecomingNoisyIntent(device, state);
             queueMsgUnderWakeLock(mAudioHandler,
                     MSG_SET_WIRED_DEVICE_CONNECTION_STATE,
@@ -3983,7 +3992,9 @@ public class AudioService extends IAudioService.Stub {
     }
 
     private void onSendBecomingNoisyIntent() {
-        sendBroadcastToAll(new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
+        Intent intent = new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        sendBroadcastToAll(intent);
     }
 
     // must be called synchronized on mConnectedDevices
@@ -4328,12 +4339,11 @@ public class AudioService extends IAudioService.Stub {
                     }
                 }
             } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                applyCurrentStreamVolume();
+
                 state = intent.getIntExtra("state", 0);
                 if (state == 1) {
                     // Headset plugged in
-                    adjustCurrentStreamVolume();
-                    // TODO: Cap volume at safe levels
-
                     boolean launchPlayer = Settings.System.getIntForUser(
                             context.getContentResolver(),
                             Settings.System.HEADSET_CONNECT_PLAYER,
@@ -4348,9 +4358,6 @@ public class AudioService extends IAudioService.Stub {
                             Log.w(TAG, "No music player found to start after headset connection");
                         }
                     }
-                } else {
-                    // Headset disconnected
-                    adjustCurrentStreamVolume();
                 }
             } else if (action.equals(Intent.ACTION_USB_AUDIO_ACCESSORY_PLUG) ||
                            action.equals(Intent.ACTION_USB_AUDIO_DEVICE_PLUG)) {
@@ -4442,7 +4449,7 @@ public class AudioService extends IAudioService.Stub {
                         0,
                         null,
                         SAFE_VOLUME_CONFIGURE_TIMEOUT_MS);
-                adjustCurrentStreamVolume();
+                applyCurrentStreamVolume();
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 AudioSystem.setParameters("screen_state=on");
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
@@ -4474,7 +4481,10 @@ public class AudioService extends IAudioService.Stub {
             }
         }
 
-        private void adjustCurrentStreamVolume() {
+        // Forces volume to update. This is needed by devices affected by a bug
+        // where the new volume is not applied when the audio device changes.
+        // See: review.cyanogenmod.org/33778
+        private void applyCurrentStreamVolume() {
             VolumeStreamState streamState;
             int device;
 

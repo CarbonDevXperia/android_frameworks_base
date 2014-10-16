@@ -2083,10 +2083,19 @@ public final class Settings {
         public static final String VOLUME_BLUETOOTH_SCO = "volume_bluetooth_sco";
 
         /**
-         * Whether to prevent loud volume levels when headset is first plugged in.
+         * Whether to display a warning dialog when the user attempts to increase media
+         * volume above a safe limit while a headset is connected. This feature is enabled
+         * by default to comply with safety regulations and the user must agree to a waiver
+         * if they wish to disable it.
          * @hide
          */
         public static final String SAFE_HEADSET_VOLUME = "safe_headset_volume";
+
+        /**
+         * Whether to reduce media volume to a safe limit each time a headset is plugged in.
+         * @hide
+         */
+        public static final String SAFE_HEADSET_VOLUME_RESTORE = "safe_headset_volume_restore";
 
         /**
          * Master volume (float in the range 0.0f to 1.0f).
@@ -4511,6 +4520,18 @@ public final class Settings {
          */
         public static final String HEADS_UP_SHOW_UPDATE = "heads_up_show_update";
 
+         /**
+         * Heads Up background color
+         * @hide
+         */
+        public static final String HEADS_UP_BG_COLOR = "heads_up_bg_color";
+
+        /**
+         * Heads Up text color
+         * @hide
+         */
+        public static final String HEADS_UP_TEXT_COLOR = "heads_up_text_color";
+
         /**
          * Heads Up in Floating Window
          *
@@ -4840,6 +4861,25 @@ public final class Settings {
          * @hide
          */
         public static final String ALLOW_CALL_RECORDING = "allow_call_recording";
+
+        /**
+         * Whether wifi settings will connect to access point automatically
+         * 0 = automatically
+         * 1 = manually
+         * @hide
+         */
+        public static final String WIFI_AUTO_CONNECT_TYPE = "wifi_auto_connect_type";
+
+        /**
+         * Whether wifi settings will connect to access point automatically when
+         * network from mobile network transform to Wifi network
+         * 0 = automatically
+         * 1 = manually
+         * 2 = always ask
+         *
+         * @hide
+         */
+        public static final String DATA_TO_WIFI_CONNECT_TYPE = "data_to_wifi_connect_type";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -5279,6 +5319,7 @@ public final class Settings {
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_P2P_DEVICE_NAME);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_SAVED_STATE);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_SUPPLICANT_SCAN_INTERVAL_MS);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_SUPPLICANT_SCAN_INTERVAL_WFD_CONNECTED_MS);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_SUSPEND_OPTIMIZATIONS_ENABLED);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_WATCHDOG_ON);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_WATCHDOG_POOR_NETWORK_TEST_ENABLED);
@@ -8073,6 +8114,13 @@ public final class Settings {
         */
        public static final String WIFI_SCAN_INTERVAL_WHEN_P2P_CONNECTED_MS =
                "wifi_scan_interval_p2p_connected_ms";
+
+       /**
+        * The intervel in milliseconds to scan at supplicant when wfd session
+        * @hide
+        */
+       public static final String WIFI_SUPPLICANT_SCAN_INTERVAL_WFD_CONNECTED_MS =
+                 "wifi_scan_intervel_wfd_connected_ms";
 
        /**
         * Whether the Wi-Fi watchdog is enabled.
